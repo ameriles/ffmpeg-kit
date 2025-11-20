@@ -56,7 +56,11 @@ fi
 
 # BUILD ENABLED LIBRARIES AND THEIR DEPENDENCIES
 let completed=0
-while [ ${#enabled_library_list[@]} -gt $completed ]; do
+let iteration=0
+let max_iterations=20
+while [ ${#enabled_library_list[@]} -gt $completed ] && [ $iteration -lt $max_iterations ]; do
+  ((iteration++))
+  let prev_completed=$completed
   for library in "${enabled_library_list[@]}"; do
     let run=0
     case $library in
@@ -79,6 +83,10 @@ while [ ${#enabled_library_list[@]} -gt $completed ]; do
       if [[ $OK_fontconfig -eq 1 ]] && [[ $OK_freetype -eq 1 ]]; then
         run=1
       fi
+      ;;
+    libiconv)
+      # libiconv has no dependencies, always compile it
+      run=1
       ;;
     lame)
       if [[ $OK_libiconv -eq 1 ]]; then
@@ -201,6 +209,34 @@ while [ ${#enabled_library_list[@]} -gt $completed ]; do
       echo -e "INFO: Skipping $library, dependencies built=$run, already built=${!BUILD_COMPLETED_FLAG}\n" 1>>"${BASEDIR}"/build.log 2>&1
     fi
   done
+  
+  # Check if we made progress in this iteration
+  if [ $prev_completed -eq $completed ] && [ ${#enabled_library_list[@]} -gt $completed ]; then
+    echo -e "\nWARNING: No progress in iteration $iteration (${completed}/${#enabled_library_list[@]} completed)\n" 1>>"${BASEDIR}"/build.log 2>&1
+    
+    # Increment no progress counter
+    if [ -z "$no_progress_count" ]; then
+      let no_progress_count=1
+    else
+      ((no_progress_count++))
+    fi
+    
+    # If no progress for 3 consecutive iterations, break
+    if [ $no_progress_count -ge 3 ]; then
+      echo -e "\nERROR: Build stuck after $no_progress_count iterations without progress (${completed}/${#enabled_library_list[@]} libraries completed)\n"
+      echo -e "ERROR: The following libraries could not be built:\n"
+      for library in "${enabled_library_list[@]}"; do
+        BUILD_COMPLETED_FLAG=$(echo "OK_${library}" | sed "s/\-/\_/g")
+        if [[ "${!BUILD_COMPLETED_FLAG}" != "1" ]]; then
+          echo "  - $library"
+        fi
+      done
+      break
+    fi
+  else
+    # Reset no progress counter if we made progress
+    let no_progress_count=0
+  fi
 done
 
 # BUILD CUSTOM LIBRARIES

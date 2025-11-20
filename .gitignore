@@ -3,3 +3,5 @@
 /prebuilt/
 .DS_Store
 .idea
+
+react-native/ios/Frameworks

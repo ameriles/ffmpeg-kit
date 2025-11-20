@@ -18,6 +18,9 @@ fi
   --disable-fast-install \
   --host="${HOST}" || return 1
 
+# FIX glShaderSource FUNCTION POINTER TYPE INCOMPATIBILITY
+sed -i '' 's|const GLchar \*\*|const GLchar *const *|g' src/render/opengles2/SDL_gles2funcs.h || return 1
+
 make -j$(get_cpu_count) || return 1
 
 make install || return 1

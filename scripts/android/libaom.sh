@@ -7,7 +7,12 @@ git checkout ${BASEDIR}/src/${LIB_NAME}/aom_ports 1>>"${BASEDIR}"/build.log 2>&1
 ASM_OPTIONS=""
 case ${ARCH} in
 arm-v7a)
-  ASM_OPTIONS="-DARCH_ARM=1 -DENABLE_NEON=0 -DHAVE_NEON=0"
+  # Patch to disable NEON intrinsics compilation for arm-v7a
+  echo "INFO: Patching libaom to disable NEON intrinsics for arm-v7a" 1>>"${BASEDIR}"/build.log 2>&1
+  # Change if(HAVE_NEON) to if(FALSE) to disable NEON compilation without breaking syntax
+  ${SED_INLINE} 's/if(HAVE_NEON)/if(FALSE)/g' "${BASEDIR}"/src/"${LIB_NAME}"/aom_dsp/aom_dsp.cmake || return 1
+  ${SED_INLINE} 's/if(HAVE_NEON)/if(FALSE)/g' "${BASEDIR}"/src/"${LIB_NAME}"/av1/av1.cmake || return 1
+  ASM_OPTIONS="-DARCH_ARM=1 -DENABLE_NEON=0 -DHAVE_NEON=0 -DCONFIG_RUNTIME_CPU_DETECT=0"
   ;;
 arm-v7a-neon)
   ASM_OPTIONS="-DARCH_ARM=1 -DENABLE_NEON=1 -DHAVE_NEON=1"
@@ -27,6 +32,7 @@ mkdir -p "${BUILD_DIR}" || return 1
 cd "${BUILD_DIR}" || return 1
 
 cmake -Wno-dev \
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DCMAKE_VERBOSE_MAKEFILE=0 \
   -DCONFIG_PIC=1 \
   -DCMAKE_C_FLAGS="${CFLAGS}" \

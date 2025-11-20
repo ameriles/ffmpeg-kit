@@ -24,6 +24,8 @@ esac
 ./configure || echo "" 2>/dev/null 1>/dev/null
 
 cmake -Wno-dev \
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+ -DCMAKE_MAKE_PROGRAM=$(which make) \
  -DUSE_ENCLIB=openssl \
  -DCMAKE_VERBOSE_MAKEFILE=0 \
  -DCMAKE_C_FLAGS="${CFLAGS}" \

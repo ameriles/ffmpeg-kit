@@ -87,9 +87,11 @@ APP_ABI := ${ANDROID_ARCHITECTURES}
 
 APP_STL := ${APP_STL}
 
+APP_ALLOW_MISSING_DEPS := true
+
 APP_PLATFORM := android-${API}
 
-APP_CFLAGS := -O3 -DANDROID ${LTS_BUILD_FLAG}${BUILD_DATE} -Wall -Wno-deprecated-declarations -Wno-pointer-sign -Wno-switch -Wno-unused-result -Wno-unused-variable
+APP_CFLAGS := -O3 -DANDROID ${LTS_BUILD_FLAG}${BUILD_DATE} -Wall -Wno-deprecated-declarations -Wno-pointer-sign -Wno-switch -Wno-unused-result -Wno-unused-variable -Wno-single-bit-bitfield-constant-conversion
 
 APP_LDFLAGS := -Wl,--hash-style=both
 EOF
@@ -1013,6 +1015,7 @@ android_ndk_cmake() {
 
   echo ${cmake} \
     -DCMAKE_VERBOSE_MAKEFILE=0 \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
     -DCMAKE_TOOLCHAIN_FILE="${ANDROID_NDK_ROOT}"/build/cmake/android.toolchain.cmake \
     -DCMAKE_SYSROOT="${ANDROID_SYSROOT}" \
     -DCMAKE_FIND_ROOT_PATH="${ANDROID_SYSROOT}" \

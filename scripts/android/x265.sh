@@ -23,7 +23,11 @@ cd "${BUILD_DIR}" || return 1
 # WORKAROUND TO FIX static_assert ERRORS
 ${SED_INLINE} 's/gnu++98/c++11/g' "${BASEDIR}"/src/"${LIB_NAME}"/source/CMakeLists.txt || return 1
 
+# REMOVE OLD CMAKE POLICY SETTINGS THAT ARE NOT SUPPORTED IN CMAKE 4.x
+${SED_INLINE} '/cmake_policy.*OLD/d' "${BASEDIR}"/src/"${LIB_NAME}"/source/CMakeLists.txt || return 1
+
 cmake -Wno-dev \
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DCMAKE_VERBOSE_MAKEFILE=0 \
   -DCMAKE_C_FLAGS="${CFLAGS}" \
   -DCMAKE_CXX_FLAGS="${CXXFLAGS}" \

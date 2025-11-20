@@ -563,11 +563,11 @@ get_host() {
     ;;
   arm64)
     if [[ ${FFMPEG_KIT_BUILD_TYPE} == "ios" ]]; then
-      echo "$(get_target_cpu)-ios-darwin"
+      echo "aarch64-apple-darwin"
     elif [[ ${FFMPEG_KIT_BUILD_TYPE} == "macos" ]]; then
-      echo "$(get_target_cpu)-apple-darwin"
+      echo "aarch64-apple-darwin"
     elif [[ ${FFMPEG_KIT_BUILD_TYPE} == "tvos" ]]; then
-      echo "$(get_target_cpu)-tvos-darwin"
+      echo "aarch64-apple-darwin"
     fi
     ;;
   x86)

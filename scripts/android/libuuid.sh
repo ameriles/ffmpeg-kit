@@ -17,6 +17,11 @@ fi
   --disable-fast-install \
   --host="${HOST}" || return 1
 
+# FIX flock() declaration for Android - add sys/file.h include
+sed -i '' '/#include "uuidP.h"/a\
+#include <sys/file.h>
+' gen_uuid.c || return 1
+
 make -j$(get_cpu_count) || return 1
 
 make install || return 1

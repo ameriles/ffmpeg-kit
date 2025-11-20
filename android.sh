@@ -168,6 +168,19 @@ for disabled_library in ${disabled_libraries[@]}; do
   set_library "${disabled_library}" 0
 done
 
+# HANDLE MUTUAL EXCLUSION: gnutls and openssl cannot be enabled simultaneously in ffmpeg
+if [[ ${ENABLED_LIBRARIES[LIBRARY_GNUTLS]} -eq 1 ]] && [[ ${ENABLED_LIBRARIES[LIBRARY_OPENSSL]} -eq 1 ]]; then
+  # On Android, always prefer openssl due to gnutls compatibility issues
+  echo -e "INFO: Both gnutls and openssl are enabled. Disabling gnutls on Android due to compatibility issues.\n" 1>>"${BASEDIR}"/build.log 2>&1
+  set_library "gnutls" 0
+  
+  # Re-enable libiconv if other libraries still need it
+  if [[ ${ENABLED_LIBRARIES[LIBRARY_FONTCONFIG]} -eq 1 ]] || [[ ${ENABLED_LIBRARIES[LIBRARY_LAME]} -eq 1 ]] || [[ ${ENABLED_LIBRARIES[LIBRARY_LIBASS]} -eq 1 ]] || [[ ${ENABLED_LIBRARIES[LIBRARY_LIBXML2]} -eq 1 ]]; then
+    echo -e "INFO: Re-enabling libiconv as it is required by other enabled libraries.\n" 1>>"${BASEDIR}"/build.log 2>&1
+    set_library "libiconv" 1
+  fi
+fi
+
 # IF HELP DISPLAYED EXIT
 if [[ -n ${DISPLAY_HELP} ]]; then
   display_help

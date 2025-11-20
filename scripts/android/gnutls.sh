@@ -12,7 +12,7 @@ ${SED_INLINE} 's|gitlab.com/gnutls/cligen|github.com/arthenica/cligen|g' "${BASE
 ${SED_INLINE} 's|gitlab.com/redhat-crypto/tests/interop|github.com/arthenica/redhat-crypto-tests-interop|g' "${BASEDIR}"/src/"${LIB_NAME}"/.gitmodules || return 1
 
 # UPDATE BUILD FLAGS
-export CFLAGS="$(get_cflags ${LIB_NAME}) -I${LIB_INSTALL_BASE}/libiconv/include"
+export CFLAGS="$(get_cflags ${LIB_NAME}) -I${LIB_INSTALL_BASE}/libiconv/include -DHAVE_TZALLOC=0"
 export CXXFLAGS=$(get_cxxflags "${LIB_NAME}")
 export LDFLAGS="$(get_ldflags ${LIB_NAME}) -L${LIB_INSTALL_BASE}/libiconv/lib"
 
@@ -39,9 +39,15 @@ make distclean 2>/dev/null 1>/dev/null
 
 # REGENERATE BUILD FILES IF NECESSARY OR REQUESTED
 if [[ ! -f "${BASEDIR}"/src/"${LIB_NAME}"/configure ]] || [[ ${RECONF_gnutls} -eq 1 ]]; then
+  # Add Homebrew GNU tools to PATH for gnutls bootstrap
+  export PATH="/opt/homebrew/opt/bison/bin:/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/gtk-doc/bin:$PATH"
+  
   ./bootstrap --skip-po || return 1
   git submodule update --remote gnulib || return 1
   overwrite_file ./gnulib/lib/fpending.c ./src/gl/fpending.c || return 1
+  
+  # Patch parse-datetime.y to not use timezone_t functions (not available on Android)
+  sed -i '' 's/HAVE_TIMEZONE_T/HAVE_TIMEZONE_T_DISABLED/g' src/gl/parse-datetime.y || return 1
 fi
 
 ./configure \

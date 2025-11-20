@@ -2,6 +2,25 @@
 
 source "${BASEDIR}/scripts/function.sh"
 
+# Prefer Homebrew-provided GNU tools for Apple builds when available.
+# This ensures tools like bison/flex/gtkdocize are found and used
+# during autoreconf/bootstrap/configure phases (fixes parse-datetime generation).
+if [[ -d "/opt/homebrew/opt/bison/bin" ]] || [[ -d "/usr/local/opt/bison/bin" ]]; then
+  # Prepend common Homebrew locations (arm64 and intel Mac layouts)
+  export PATH="/opt/homebrew/opt/bison/bin:/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/gtk-doc/bin:/usr/local/opt/bison/bin:/usr/local/opt/flex/bin:/usr/local/opt/gtk-doc/bin:$PATH"
+  # Explicitly export full paths for tools that some projects reference directly
+  if [[ -x "/opt/homebrew/opt/bison/bin/bison" ]]; then
+    export BISON="/opt/homebrew/opt/bison/bin/bison"
+  elif [[ -x "/usr/local/opt/bison/bin/bison" ]]; then
+    export BISON="/usr/local/opt/bison/bin/bison"
+  fi
+  if [[ -x "/opt/homebrew/opt/flex/bin/flex" ]]; then
+    export FLEX="/opt/homebrew/opt/flex/bin/flex"
+  elif [[ -x "/usr/local/opt/flex/bin/flex" ]]; then
+    export FLEX="/usr/local/opt/flex/bin/flex"
+  fi
+fi
+
 export FFMPEG_LIBS=("libavcodec" "libavdevice" "libavfilter" "libavformat" "libavutil" "libswresample" "libswscale")
 
 get_ffmpeg_kit_version() {

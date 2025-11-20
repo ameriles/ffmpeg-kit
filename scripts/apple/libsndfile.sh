@@ -19,9 +19,10 @@ fi
   --disable-alsa \
   --disable-full-suite \
   --disable-external-libs \
+  --disable-test-coverage \
   --host="${HOST}" || return 1
 
-make -j$(get_cpu_count) || return 1
+make -j$(get_cpu_count) GENFILES="" || return 1
 
 make install || return 1
 

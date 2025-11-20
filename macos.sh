@@ -169,6 +169,22 @@ for disabled_library in ${disabled_libraries[@]}; do
   set_library "${disabled_library}" 0
 done
 
+# HANDLE MUTUAL EXCLUSION: gnutls and openssl cannot be enabled simultaneously in ffmpeg
+if [[ ${ENABLED_LIBRARIES[LIBRARY_GNUTLS]} -eq 1 ]] && [[ ${ENABLED_LIBRARIES[LIBRARY_OPENSSL]} -eq 1 ]]; then
+  if [[ ${GPL_ENABLED} == "yes" ]]; then
+    # Prefer gnutls when GPL is enabled
+    echo -e "INFO: Both gnutls and openssl are enabled. Disabling openssl since GPL is enabled and gnutls is preferred.\n" 1>>"${BASEDIR}"/build.log 2>&1
+    set_library "openssl" 0
+    # Also disable srt which depends on openssl
+    echo -e "INFO: Disabling srt since its dependency openssl is disabled.\n" 1>>"${BASEDIR}"/build.log 2>&1
+    set_library "srt" 0
+  else
+    # Prefer openssl otherwise
+    echo -e "INFO: Both gnutls and openssl are enabled. Disabling gnutls since GPL is not enabled and openssl is preferred.\n" 1>>"${BASEDIR}"/build.log 2>&1
+    set_library "gnutls" 0
+  fi
+fi
+
 # IF HELP DISPLAYED EXIT
 if [[ -n ${DISPLAY_HELP} ]]; then
   display_help

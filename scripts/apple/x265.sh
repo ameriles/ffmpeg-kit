@@ -49,6 +49,7 @@ ${SED_INLINE} 's/\.text/.equ g_lumaFilter, .-g_lumaFilter_bytes\
 overwrite_file "${BASEDIR}"/tools/patch/cmake/x265/CMakeLists.txt "${BASEDIR}"/src/"${LIB_NAME}"/source/CMakeLists.txt || return 1
 
 cmake -Wno-dev \
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DCMAKE_VERBOSE_MAKEFILE=0 \
   -DCMAKE_C_FLAGS="${CFLAGS}" \
   -DCMAKE_CXX_FLAGS="${CXXFLAGS}" \

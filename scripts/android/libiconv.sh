@@ -21,6 +21,12 @@ if [[ ! -f "${BASEDIR}"/src/"${LIB_NAME}"/configure ]] || [[ ${RECONF_libiconv} 
   ./autogen.sh || return 1
 fi
 
+# FIX libcharset configuration - must be done after distclean
+echo "INFO: Generating libcharset configure script" 1>>"${BASEDIR}"/build.log 2>&1
+cd "${BASEDIR}"/src/"${LIB_NAME}"/libcharset || return 1
+./autogen.sh --skip-gnulib 1>>"${BASEDIR}"/build.log 2>&1 || return 1
+cd "${BASEDIR}"/src/"${LIB_NAME}" || return 1
+
 ./configure \
   --prefix="${LIB_INSTALL_PREFIX}" \
   --with-pic \
@@ -30,6 +36,14 @@ fi
   --disable-fast-install \
   --disable-rpath \
   --host="${HOST}" || return 1
+
+# Disable HTML documentation generation to avoid groff dependency
+${SED_INLINE} 's|man/iconv\.1\.html||g' Makefile || return 1
+${SED_INLINE} 's|man/iconv\.3\.html||g' Makefile || return 1
+${SED_INLINE} 's|man/iconv_close\.3\.html||g' Makefile || return 1
+${SED_INLINE} 's|man/iconv_open\.3\.html||g' Makefile || return 1
+${SED_INLINE} 's|man/iconv_open_into\.3\.html||g' Makefile || return 1
+${SED_INLINE} 's|man/iconvctl\.3\.html||g' Makefile || return 1
 
 make -j$(get_cpu_count) || return 1
 

@@ -28,9 +28,19 @@ make distclean 2>/dev/null 1>/dev/null
 
 # REGENERATE BUILD FILES IF NECESSARY OR REQUESTED
 if [[ ! -f "${BASEDIR}"/src/"${LIB_NAME}"/configure ]] || [[ ${RECONF_gnutls} -eq 1 ]]; then
+  # Ensure Homebrew GNU tools are available for bootstrap (bison/flex/gtk-doc)
+  if [[ -d "/opt/homebrew/opt/bison/bin" ]] || [[ -d "/usr/local/opt/bison/bin" ]]; then
+    export PATH="/opt/homebrew/opt/bison/bin:/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/gtk-doc/bin:/usr/local/opt/bison/bin:/usr/local/opt/flex/bin:/usr/local/opt/gtk-doc/bin:$PATH"
+  fi
+
   ./bootstrap --skip-po || return 1
   git submodule update --remote gnulib || return 1
   overwrite_file ./gnulib/lib/fpending.c ./src/gl/fpending.c || return 1
+
+  # Fix parse-datetime.c if bison generated it with .tab.h includes (workaround for manual generation)
+  if [[ -f "${BASEDIR}"/src/"${LIB_NAME}"/src/gl/parse-datetime.c ]]; then
+    ${SED_INLINE} 's|"parse-datetime\.tab\.h"|"parse-datetime-gen.h"|g' "${BASEDIR}"/src/"${LIB_NAME}"/src/gl/parse-datetime.c || true
+  fi
 fi
 
 ./configure \

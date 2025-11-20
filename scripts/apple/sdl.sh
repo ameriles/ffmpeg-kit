@@ -6,6 +6,10 @@ case ${ARCH} in
 *-mac-catalyst)
   ASM_OPTIONS="--disable-video-cocoa --disable-render-metal --disable-diskaudio"
   ;;
+arm64 | armv7 | armv7s | arm64e | i386 | x86-64 | arm64-simulator)
+  # For iOS (non-catalyst), disable macOS-specific frameworks
+  ASM_OPTIONS="--disable-video-cocoa --disable-render-metal"
+  ;;
 esac
 
 # ALWAYS CLEAN THE PREVIOUS BUILD
@@ -36,6 +40,7 @@ overwrite_file "${FFMPEG_KIT_TMPDIR}"/source/config/config.sub "${BASEDIR}"/src/
   --disable-video-x11 \
   --disable-joystick \
   --disable-haptic \
+  --disable-power \
   ${ASM_OPTIONS} \
   --host="${HOST}" || return 1
 
@@ -45,3 +50,14 @@ make install || return 1
 
 # MANUALLY COPY PKG-CONFIG FILES
 cp ./*.pc "${INSTALL_PKG_CONFIG_DIR}" || return 1
+
+# PATCH sdl2.pc to remove macOS-only frameworks for iOS builds  
+if [[ "${FFMPEG_KIT_BUILD_TYPE}" == "ios" ]] || [[ "${FFMPEG_KIT_BUILD_TYPE}" == "tvos" ]]; then
+  ${SED_INLINE} 's/-Wl,-framework,Cocoa//g' "${INSTALL_PKG_CONFIG_DIR}/sdl2.pc" || return 1
+  ${SED_INLINE} 's/-Wl,-framework,Carbon//g' "${INSTALL_PKG_CONFIG_DIR}/sdl2.pc" || return 1
+  ${SED_INLINE} 's/-Wl,-framework,IOKit//g' "${INSTALL_PKG_CONFIG_DIR}/sdl2.pc" || return 1
+  # Add iOS-specific frameworks required by SDL
+  ${SED_INLINE} 's/\(Libs.private:.*\)/\1 -Wl,-framework,AVFoundation -Wl,-framework,UIKit/g' "${INSTALL_PKG_CONFIG_DIR}/sdl2.pc" || return 1
+  # Clean up any resulting double spaces
+  ${SED_INLINE} 's/  */ /g' "${INSTALL_PKG_CONFIG_DIR}/sdl2.pc" || return 1
+fi
