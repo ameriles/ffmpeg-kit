@@ -34,13 +34,43 @@ This will automatically download the native binaries (~30MB) from GitHub Release
 
 ### iOS Setup
 
+Edit your `ios/Podfile` and add the following **before** `use_native_modules!`:
+
+```ruby
+pod 'ffmpeg-kit-react-native-video-gpl', :podspec => '../node_modules/@ameriles/ffmpeg-kit-react-native-video-gpl/react-native/ffmpeg-kit-react-native-video-gpl.podspec'
+```
+
+Then install pods:
+
 ```bash
 cd ios && pod install
 ```
 
+**Full Podfile example:**
+```ruby
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
+platform :ios, '12.1'
+
+target 'YourApp' do
+  config = use_native_modules!
+
+  # Add this BEFORE use_native_modules! to avoid conflicts
+  pod 'ffmpeg-kit-react-native-video-gpl', :podspec => '../node_modules/@ameriles/ffmpeg-kit-react-native-video-gpl/react-native/ffmpeg-kit-react-native-video-gpl.podspec'
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    :hermes_enabled => true
+  )
+end
+```
+
 ### Android Setup
 
-No additional steps required. Gradle will use the AAR automatically.
+No additional configuration needed! The module automatically uses the local AAR with all video-gpl libraries included.
+
+**Note:** Unlike the original ffmpeg-kit, you don't need to specify `ext.ffmpegKitPackage` in `android/build.gradle` because this build includes all video codecs by default.
 
 ## Usage
 
