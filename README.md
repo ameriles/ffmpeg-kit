@@ -137,6 +137,75 @@ include them.
  - `VideoToolbox` is not available on LTS releases of `iOS` and `tvOS`
  - `zimg` is supported since `v4.5.1`
 
+#### Custom video-gpl Build (Optimized)
+
+A custom **video-gpl** variant has been created with only essential video codecs, optimized for video transcoding use cases where subtitle rendering and audio encoding are not needed. This variant provides significantly smaller binaries (~30-40% reduction) while maintaining full video codec support.
+
+**Libraries included:**
+- **Video codecs (GPL)**: x264, x265, xvidcore, kvazaar
+- **Video codecs (LGPL)**: dav1d (AV1), libvpx (VP8/VP9), libwebp
+- **Video utilities**: libvidstab (stabilization), snappy, zimg (colorspace conversion)
+- **Audio support**: Native FFmpeg decoders for MP3, Vorbis, AAC, Opus, FLAC (no encoders)
+
+**Libraries excluded:**
+- ❌ Subtitle/text rendering: fontconfig, freetype, fribidi, libass
+- ❌ Legacy audio codecs: libtheora, libvorbis (covered by native decoders)
+- ❌ Audio encoders: lame, opus, shine, soxr, speex, etc.
+
+**Binary sizes:**
+- iOS (arm64): ~20 MB
+- Android (arm-v7a + arm64-v8a): ~20 MB AAR
+
+**Benchmark (MacBook Pro M3 Pro, 12 cores):**
+- iOS: 2m 51s
+- Android: 6m 48s
+- Total: 9m 39s
+
+**Build commands:**
+```bash
+# iOS (arm64 device only)
+./ios.sh --enable-gpl \
+  --enable-dav1d \
+  --enable-kvazaar \
+  --enable-libvpx \
+  --enable-libwebp \
+  --enable-snappy \
+  --enable-libvidstab \
+  --enable-x264 \
+  --enable-x265 \
+  --enable-xvidcore \
+  --enable-zimg \
+  --disable-arm64-simulator \
+  --disable-arm64e \
+  --disable-i386 \
+  --disable-x86-64 \
+  --disable-x86-64-mac-catalyst \
+  --disable-arm64-mac-catalyst
+
+# Android (arm-v7a + arm64-v8a, API 24+)
+./android.sh --enable-gpl \
+  --enable-dav1d \
+  --enable-kvazaar \
+  --enable-libvpx \
+  --enable-libwebp \
+  --enable-snappy \
+  --enable-libvidstab \
+  --enable-x264 \
+  --enable-x265 \
+  --enable-xvidcore \
+  --enable-zimg \
+  --disable-arm-v7a-neon \
+  --disable-x86 \
+  --disable-x86-64
+```
+
+**Use cases:**
+- Video transcoding with codec copy for audio (`-c:a copy`)
+- Video compression and format conversion
+- Video stabilization
+- H.264/H.265/VP8/VP9/AV1 encoding/decoding
+- Any workflow where subtitle rendering and audio encoding are not required
+
 ### 10. Versions
 
 `FFmpegKit` binaries generated use the same major and minor version numbers as the upstream `FFmpeg` project. The

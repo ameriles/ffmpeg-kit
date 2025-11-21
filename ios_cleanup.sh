@@ -18,7 +18,7 @@ rm -rf .tmp/ios*
 rm -rf .tmp/apple*
 
 # Remove build log (optional - comment out if you want to keep it)
-# rm -f build.log
+rm -f build.log
 
 echo "✅ iOS cleanup complete!"
 echo ""

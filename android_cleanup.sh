@@ -28,7 +28,7 @@ echo "  → Removing temporary build files..."
 rm -rf .tmp/android*
 
 # Remove build log (optional - comment out if you want to keep it)
-# rm -f build.log
+rm -f build.log
 
 echo "✅ Android cleanup complete!"
 echo ""

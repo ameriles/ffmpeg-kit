@@ -4,7 +4,35 @@
 # Script to measure the complete build time for both iOS and Android
 # This will give you accurate timing for your M3 MacBook Pro 💪
 
-echo "🚀 Starting ffmpeg-kit full build benchmark..."
+# Parse arguments
+BUILD_TYPE="video"  # default to video-gpl
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --full)
+            BUILD_TYPE="full"
+            shift
+            ;;
+        --video)
+            BUILD_TYPE="video"
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Usage: $0 [--full|--video]"
+            echo "  --full:  Build full-gpl variant (all codecs, all libraries)"
+            echo "  --video: Build video-gpl variant (video codecs + GPL, default)"
+            exit 1
+            ;;
+    esac
+done
+
+if [ "$BUILD_TYPE" = "full" ]; then
+    echo "🚀 Starting ffmpeg-kit FULL-GPL build benchmark..."
+else
+    echo "🚀 Starting ffmpeg-kit VIDEO-GPL build benchmark..."
+fi
+
 echo "Platform: $(uname -m)"
 echo "Date: $(date)"
 echo ""
@@ -27,13 +55,36 @@ echo "=========================================="
 echo ""
 
 IOS_START=$(date +%s)
-./ios.sh --full --enable-gpl \
-  --disable-arm64-simulator \
-  --disable-arm64e \
-  --disable-i386 \
-  --disable-x86-64 \
-  --disable-x86-64-mac-catalyst \
-  --disable-arm64-mac-catalyst
+
+if [ "$BUILD_TYPE" = "video" ]; then
+    # video-gpl: solo codecs de video esenciales (sin subtítulos ni texto)
+    ./ios.sh --enable-gpl \
+      --enable-dav1d \
+      --enable-kvazaar \
+      --enable-libvpx \
+      --enable-libwebp \
+      --enable-snappy \
+      --enable-libvidstab \
+      --enable-x264 \
+      --enable-x265 \
+      --enable-xvidcore \
+      --enable-zimg \
+      --disable-arm64-simulator \
+      --disable-arm64e \
+      --disable-i386 \
+      --disable-x86-64 \
+      --disable-x86-64-mac-catalyst \
+      --disable-arm64-mac-catalyst
+else
+    # full-gpl: todas las librerías
+    ./ios.sh --full --enable-gpl \
+      --disable-arm64-simulator \
+      --disable-arm64e \
+      --disable-i386 \
+      --disable-x86-64 \
+      --disable-x86-64-mac-catalyst \
+      --disable-arm64-mac-catalyst
+fi
 
 IOS_END=$(date +%s)
 IOS_DURATION=$((IOS_END - IOS_START))
@@ -64,10 +115,30 @@ export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
 export ANDROID_NDK_ROOT="$HOME/Library/Android/sdk/ndk/27.1.12297006"
 
 ANDROID_START=$(date +%s)
-./android.sh --full --enable-gpl \
-  --disable-arm-v7a-neon \
-  --disable-x86 \
-  --disable-x86-64
+
+if [ "$BUILD_TYPE" = "video" ]; then
+    # video-gpl: solo codecs de video esenciales (sin subtítulos ni texto)
+    ./android.sh --enable-gpl \
+      --enable-dav1d \
+      --enable-kvazaar \
+      --enable-libvpx \
+      --enable-libwebp \
+      --enable-snappy \
+      --enable-libvidstab \
+      --enable-x264 \
+      --enable-x265 \
+      --enable-xvidcore \
+      --enable-zimg \
+      --disable-arm-v7a-neon \
+      --disable-x86 \
+      --disable-x86-64
+else
+    # full-gpl: todas las librerías
+    ./android.sh --full --enable-gpl \
+      --disable-arm-v7a-neon \
+      --disable-x86 \
+      --disable-x86-64
+fi
 
 ANDROID_END=$(date +%s)
 ANDROID_DURATION=$((ANDROID_END - ANDROID_START))
@@ -95,6 +166,11 @@ echo "=========================================="
 echo "📊 BUILD BENCHMARK RESULTS"
 echo "=========================================="
 echo ""
+if [ "$BUILD_TYPE" = "video" ]; then
+    echo "Build type:    VIDEO-GPL"
+else
+    echo "Build type:    FULL-GPL"
+fi
 echo "iOS build:     ${IOS_MINUTES}m ${IOS_SECONDS}s"
 echo "Android build: ${ANDROID_MINUTES}m ${ANDROID_SECONDS}s"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

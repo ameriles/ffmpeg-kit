@@ -29,7 +29,7 @@ echo "🗑️  Cleaning temporary files..."
 rm -rf .tmp
 
 # Remove build log (optional - comment out if you want to keep it)
-# rm -f build.log
+rm -f build.log
 
 echo ""
 echo "✅ Full cleanup complete!"
