@@ -1,6 +1,6 @@
 {
   "name": "@ameriles/ffmpeg-kit-react-native-video-gpl",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "FFmpeg Kit for React Native - Video GPL Optimized Build",
   "main": "react-native/src/index",
   "types": "react-native/src/index.d.ts",
@@ -29,5 +29,13 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
+  },
+  "codegenConfig": {
+    "name": "ffmpegkitreactnative",
+    "type": "all",
+    "jsSrcsDir": "react-native/src",
+    "android": {
+      "javaPackageName": "com.arthenica.ffmpegkit.reactnative"
+    }
   }
 }
