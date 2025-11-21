@@ -18,15 +18,27 @@ npm install github:ameriles/ffmpeg-kit#v1.0.0-video-gpl
 yarn add github:ameriles/ffmpeg-kit#v1.0.0-video-gpl
 ```
 
-The postinstall script will automatically download the native binaries from GitHub Releases.
+### Automatic Binary Download
 
-### iOS
+Add a postinstall script to your React Native project's `package.json`:
+
+```json
+{
+  "scripts": {
+    "postinstall": "node node_modules/@ameriles/ffmpeg-kit-react-native-video-gpl/react-native/scripts/download-binaries.js || true"
+  }
+}
+```
+
+This will automatically download the native binaries (~30MB) from GitHub Releases on `npm install`.
+
+### iOS Setup
 
 ```bash
 cd ios && pod install
 ```
 
-### Android
+### Android Setup
 
 No additional steps required. Gradle will use the AAR automatically.
 
