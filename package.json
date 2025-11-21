@@ -1,0 +1,33 @@
+{
+  "name": "@ameriles/ffmpeg-kit-react-native-video-gpl",
+  "version": "1.0.0",
+  "description": "FFmpeg Kit for React Native - Video GPL Optimized Build",
+  "main": "react-native/src/index",
+  "types": "react-native/src/index.d.ts",
+  "react-native": "react-native/src/index",
+  "scripts": {
+    "postinstall": "node react-native/scripts/download-binaries.js"
+  },
+  "keywords": [
+    "react-native",
+    "android",
+    "ffmpeg",
+    "ffmpeg-kit",
+    "ios",
+    "video-gpl"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ameriles/ffmpeg-kit.git"
+  },
+  "author": "ameriles",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/ameriles/ffmpeg-kit/issues"
+  },
+  "homepage": "https://github.com/ameriles/ffmpeg-kit",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  }
+}
