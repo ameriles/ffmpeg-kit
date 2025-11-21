@@ -22,14 +22,14 @@ Pod::Spec.new do |s|
 
   # Use local frameworks downloaded by postinstall script
   s.vendored_frameworks = [
-    "ios/Frameworks/ffmpegkit.framework",
-    "ios/Frameworks/libavcodec.framework",
-    "ios/Frameworks/libavdevice.framework",
-    "ios/Frameworks/libavfilter.framework",
-    "ios/Frameworks/libavformat.framework",
-    "ios/Frameworks/libavutil.framework",
-    "ios/Frameworks/libswresample.framework",
-    "ios/Frameworks/libswscale.framework"
+    "ios/ffmpegkit.framework",
+    "ios/libavcodec.framework",
+    "ios/libavdevice.framework",
+    "ios/libavfilter.framework",
+    "ios/libavformat.framework",
+    "ios/libavutil.framework",
+    "ios/libswresample.framework",
+    "ios/libswscale.framework"
   ]
 
   s.frameworks = "AudioToolbox", "VideoToolbox", "CoreMedia"

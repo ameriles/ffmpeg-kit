@@ -10,7 +10,7 @@ const REPO = 'ameriles/ffmpeg-kit';
 const IOS_BINARY = 'ffmpeg-kit-video-gpl-ios.tar.gz';
 const ANDROID_BINARY = 'ffmpeg-kit-video-gpl-android.zip';
 
-const iosDir = path.join(__dirname, '../ios/Frameworks');
+const iosDir = path.join(__dirname, '../ios');
 const androidDir = path.join(__dirname, '../android/libs');
 
 console.log('📦 Downloading FFmpeg Kit video-gpl binaries...');
@@ -51,6 +51,15 @@ async function downloadAndExtract() {
       console.log('✅ Binaries already present, skipping download');
       return;
     }
+    
+    // Clean up any existing frameworks first
+    const existingFrameworks = fs.readdirSync(iosDir).filter(f => f.endsWith('.framework'));
+    existingFrameworks.forEach(f => {
+      const fpath = path.join(iosDir, f);
+      if (fs.existsSync(fpath)) {
+        execSync(`rm -rf ${fpath}`);
+      }
+    });
 
     const baseUrl = `https://github.com/${REPO}/releases/download/${RELEASE_TAG}`;
     
@@ -59,7 +68,7 @@ async function downloadAndExtract() {
     const iosTarPath = path.join(__dirname, IOS_BINARY);
     await download(`${baseUrl}/${IOS_BINARY}`, iosTarPath);
     console.log('📱 Extracting iOS frameworks...');
-    execSync(`tar -xzf ${iosTarPath} -C ${path.dirname(iosDir)} --strip-components=1`);
+    execSync(`tar -xzf ${iosTarPath} -C ${iosDir} --strip-components=1`);
     fs.unlinkSync(iosTarPath);
     
     // Download Android
