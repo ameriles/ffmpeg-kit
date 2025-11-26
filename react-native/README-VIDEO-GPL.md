@@ -6,6 +6,7 @@ FFmpeg Kit for React Native - Video GPL Optimized Build
 
 - **Optimized for video transcoding**: Essential video codecs only
 - **Small binary size**: ~20MB per platform (30-40% smaller than full-gpl)
+- **Hardware acceleration**: VideoToolbox (iOS), MediaCodec (Android) - faster processing with lower battery consumption
 - **Audio decoder support**: MP3, Vorbis, AAC, Opus, FLAC (no encoders)
 - **No subtitle rendering**: fontconfig, freetype, libass excluded
 - **GPL licensed codecs**: x264, x265, xvidcore included
@@ -13,9 +14,9 @@ FFmpeg Kit for React Native - Video GPL Optimized Build
 ## Installation
 
 ```bash
-npm install github:ameriles/ffmpeg-kit#v1.0.0-video-gpl
+npm install github:ameriles/ffmpeg-kit#v1.0.4-video-gpl
 # or
-yarn add github:ameriles/ffmpeg-kit#v1.0.0-video-gpl
+yarn add github:ameriles/ffmpeg-kit#v1.0.4-video-gpl
 ```
 
 ### Automatic Binary Download
@@ -104,6 +105,21 @@ await FFmpegKit.execute('-i input.mp4 -c:v libx264 -crf 23 -c:a copy output.mp4'
 - Video stabilization (libvidstab)
 - Colorspace conversion (zimg)
 - Compression (snappy)
+- Hardware acceleration (VideoToolbox on iOS, MediaCodec on Android)
+
+## Hardware Acceleration
+
+This build includes hardware acceleration support for faster video processing:
+
+- **iOS**: VideoToolbox for H.264/H.265 encoding/decoding
+- **Android**: MediaCodec for GPU-accelerated video processing
+
+**Benefits:**
+- ⚡ 2-5x faster encoding
+- 🔋 Lower battery consumption
+- 🌡️ Less device heat
+
+For detailed usage examples and best practices, see [HARDWARE-ACCELERATION.md](./HARDWARE-ACCELERATION.md).
 
 ## What's NOT Included
 
