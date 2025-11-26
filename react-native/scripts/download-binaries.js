@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const RELEASE_TAG = 'v1.0.0-video-gpl';
+const RELEASE_TAG = 'v1.1.0-video-gpl';
 const REPO = 'ameriles/ffmpeg-kit';
 const IOS_BINARY = 'ffmpeg-kit-video-gpl-ios.tar.gz';
 const ANDROID_BINARY = 'ffmpeg-kit-video-gpl-android.zip';

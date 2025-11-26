@@ -190,7 +190,7 @@ const command = '-c:v h264_videotoolbox -b:v 2M'; // ✅
 ## Version Information
 
 This guide applies to:
-- **Package Version**: v1.0.4+
+- **Package Version**: v1.1.0+
 - **FFmpeg Version**: Based on FFmpeg 6.0+
 - **iOS**: VideoToolbox support included
 - **Android**: MediaCodec support included (API 24+)
