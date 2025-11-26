@@ -1,4 +1,4 @@
-declare module 'ffmpeg-kit-react-native' {
+declare module '@ameriles/ffmpeg-kit-react-native-video-gpl' {
 
   export abstract class AbstractSession implements Session {
 
