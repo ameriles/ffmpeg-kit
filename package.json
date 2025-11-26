@@ -1,7 +1,7 @@
 {
   "name": "@ameriles/ffmpeg-kit-react-native-video-gpl",
-  "version": "1.0.3",
-  "description": "FFmpeg Kit for React Native - Video GPL Optimized Build",
+  "version": "1.0.4",
+  "description": "FFmpeg Kit for React Native - Video GPL Optimized Build with Hardware Acceleration",
   "main": "react-native/src/index",
   "types": "react-native/src/index.d.ts",
   "react-native": "react-native/src/index",

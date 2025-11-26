@@ -146,6 +146,7 @@ A custom **video-gpl** variant has been created with only essential video codecs
 - **Video codecs (LGPL)**: dav1d (AV1), libvpx (VP8/VP9), libwebp
 - **Video utilities**: libvidstab (stabilization), snappy, zimg (colorspace conversion)
 - **Audio support**: Native FFmpeg decoders for MP3, Vorbis, AAC, Opus, FLAC (no encoders)
+- **Hardware acceleration**: VideoToolbox (iOS), MediaCodec (Android) - for faster encode/decode with lower battery consumption
 
 **Libraries excluded:**
 - ❌ Subtitle/text rendering: fontconfig, freetype, fribidi, libass
@@ -175,6 +176,7 @@ A custom **video-gpl** variant has been created with only essential video codecs
   --enable-x265 \
   --enable-xvidcore \
   --enable-zimg \
+  --enable-ios-videotoolbox \
   --disable-arm64-simulator \
   --disable-arm64e \
   --disable-i386 \
@@ -194,10 +196,21 @@ A custom **video-gpl** variant has been created with only essential video codecs
   --enable-x265 \
   --enable-xvidcore \
   --enable-zimg \
+  --enable-android-media-codec \
   --disable-arm-v7a-neon \
   --disable-x86 \
   --disable-x86-64
 ```
+
+**Hardware acceleration:**
+- **iOS VideoToolbox**: Hardware-accelerated H.264/H.265 encoding and decoding
+  - Faster processing with lower battery consumption
+  - Automatically used for supported codecs (no additional flags needed)
+  - Offloads work to dedicated video processor
+- **Android MediaCodec**: Hardware-accelerated encoding/decoding
+  - Uses device's GPU/DSP for video processing
+  - Significantly faster on modern Android devices
+  - Supports H.264, H.265, VP8, VP9 on compatible devices
 
 **Use cases:**
 - Video transcoding with codec copy for audio (`-c:a copy`)
@@ -205,6 +218,7 @@ A custom **video-gpl** variant has been created with only essential video codecs
 - Video stabilization
 - H.264/H.265/VP8/VP9/AV1 encoding/decoding
 - Any workflow where subtitle rendering and audio encoding are not required
+- Mobile video processing with optimal battery efficiency
 
 ### 10. Versions
 

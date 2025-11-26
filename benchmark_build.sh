@@ -69,6 +69,7 @@ if [ "$BUILD_TYPE" = "video" ]; then
       --enable-x265 \
       --enable-xvidcore \
       --enable-zimg \
+      --enable-ios-videotoolbox \
       --disable-arm64-simulator \
       --disable-arm64e \
       --disable-i386 \
@@ -129,6 +130,7 @@ if [ "$BUILD_TYPE" = "video" ]; then
       --enable-x265 \
       --enable-xvidcore \
       --enable-zimg \
+      --enable-android-media-codec \
       --disable-arm-v7a-neon \
       --disable-x86 \
       --disable-x86-64
