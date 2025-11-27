@@ -46,12 +46,12 @@ async function downloadAndExtract() {
     }
 
     // Check if already downloaded
-    if (fs.existsSync(path.join(iosDir, 'ffmpegkit.framework')) && 
+    if (fs.existsSync(path.join(iosDir, 'ffmpegkit.framework')) &&
         fs.existsSync(path.join(androidDir, 'ffmpeg-kit.aar'))) {
       console.log('✅ Binaries already present, skipping download');
       return;
     }
-    
+
     // Clean up any existing frameworks first
     const existingFrameworks = fs.readdirSync(iosDir).filter(f => f.endsWith('.framework'));
     existingFrameworks.forEach(f => {
@@ -62,7 +62,7 @@ async function downloadAndExtract() {
     });
 
     const baseUrl = `https://github.com/${REPO}/releases/download/${RELEASE_TAG}`;
-    
+
     // Download iOS
     console.log('📱 Downloading iOS frameworks...');
     const iosTarPath = path.join(__dirname, IOS_BINARY);
@@ -70,14 +70,14 @@ async function downloadAndExtract() {
     console.log('📱 Extracting iOS frameworks...');
     execSync(`tar -xzf ${iosTarPath} -C ${iosDir} --strip-components=1`);
     fs.unlinkSync(iosTarPath);
-    
+
     // Download Android
     console.log('🤖 Downloading Android AAR...');
     const androidZipPath = path.join(__dirname, ANDROID_BINARY);
     await download(`${baseUrl}/${ANDROID_BINARY}`, androidZipPath);
     console.log('🤖 Extracting Android AAR...');
     execSync(`unzip -q ${androidZipPath} -d ${path.dirname(androidDir)}`);
-    
+
     // Move AAR to correct location
     const aarSource = path.join(path.dirname(androidDir), 'bundle-android-aar/ffmpeg-kit/ffmpeg-kit.aar');
     const aarDest = path.join(androidDir, 'ffmpeg-kit.aar');
@@ -87,7 +87,7 @@ async function downloadAndExtract() {
       execSync(`rm -rf ${path.join(path.dirname(androidDir), 'bundle-android-aar')}`);
     }
     fs.unlinkSync(androidZipPath);
-    
+
     console.log('✅ Binaries downloaded and extracted successfully!');
   } catch (error) {
     console.error('❌ Failed to download binaries:', error.message);
