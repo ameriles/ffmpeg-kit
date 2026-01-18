@@ -14,9 +14,9 @@ FFmpeg Kit for React Native - Video GPL Optimized Build
 ## Installation
 
 ```bash
-npm install github:ameriles/ffmpeg-kit#v1.1.0-video-gpl
+npm install github:ameriles/ffmpeg-kit#v1.2.0-video-gpl
 # or
-yarn add github:ameriles/ffmpeg-kit#v1.1.0-video-gpl
+yarn add github:ameriles/ffmpeg-kit#v1.2.0-video-gpl
 ```
 
 ### Automatic Binary Download
