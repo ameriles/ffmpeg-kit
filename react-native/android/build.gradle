@@ -11,17 +11,7 @@ buildscript {
 
 apply plugin: 'com.android.library'
 
-static def safePackageName(String packageName) {
-  packageName.replace("-lts", "")
-}
-
-def safePackageVersion(String packageName) {
-  def version = project.properties['ffmpegKit.android.main.version']
-  def ltsVersion = project.properties['ffmpegKit.android.lts.version']
-  packageName.contains("-lts") ? ltsVersion + ".LTS" : version
-}
-
-def safeExtGet(String prop, String fallback) {
+def safeExtGet(String prop, Object fallback) {
   rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
 
@@ -30,11 +20,11 @@ android {
     namespace 'com.arthenica.ffmpegkit.reactnative'
   }
 
-  compileSdkVersion 33
+  compileSdkVersion safeExtGet('compileSdkVersion', 34) as int
 
   defaultConfig {
-    minSdkVersion safeExtGet('ffmpegKitPackage', 'https').contains("-lts") ? 16 : 24
-    targetSdkVersion 33
+    minSdkVersion safeExtGet('minSdkVersion', 24) as int
+    targetSdkVersion safeExtGet('targetSdkVersion', 34) as int
     versionCode 602
     versionName "6.0.2"
   }
@@ -56,6 +46,11 @@ android {
 repositories {
   mavenCentral()
   google()
+
+  // Local AAR file
+  flatDir {
+    dirs 'libs'
+  }
 
   def found = false
   def defaultDir = null
@@ -125,5 +120,11 @@ repositories {
 
 dependencies {
   api 'com.facebook.react:react-native:+'
-  implementation 'com.arthenica:ffmpeg-kit-' + safePackageName(safeExtGet('ffmpegKitPackage', 'https')) + ':' + safePackageVersion(safeExtGet('ffmpegKitPackage', 'https'))
+
+  // Use local AAR file instead of Maven
+  implementation(name: 'ffmpeg-kit', ext: 'aar')
+
+  // FFmpegKit transitive dependencies
+  implementation 'com.arthenica:smart-exception-java:0.2.1'
+  implementation 'com.arthenica:smart-exception-common:0.2.1'
 }
