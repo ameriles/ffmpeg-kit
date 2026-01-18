@@ -1,21 +1,21 @@
-# GitHub Release Instructions for v1.1.0-video-gpl
+# GitHub Release Instructions for v1.2.0-video-gpl
 
 ## Steps to Create the Release
 
 1. Go to: https://github.com/ameriles/ffmpeg-kit/releases/new
 
-2. **Choose a tag**: Select `v1.1.0-video-gpl`
+2. **Choose a tag**: Select `v1.2.0-video-gpl`
 
 3. **Release title**: 
    ```
-   Video-GPL v1.1.0 - Hardware Acceleration Release
+   Video-GPL v1.2.0 - Hardware Acceleration Release
    ```
 
 4. **Description** (copy and paste):
 
 ---
 
-## 🚀 What's New in v1.1.0
+## 🚀 What's New in v1.2.0
 
 This release adds **hardware acceleration support** for both iOS and Android platforms, providing significant performance improvements without increasing binary size.
 
@@ -55,9 +55,9 @@ Perfect for:
 ## 📥 Installation
 
 ```bash
-npm install github:ameriles/ffmpeg-kit#v1.1.0-video-gpl
+npm install github:ameriles/ffmpeg-kit#v1.2.0-video-gpl
 # or
-yarn add github:ameriles/ffmpeg-kit#v1.1.0-video-gpl
+yarn add github:ameriles/ffmpeg-kit#v1.2.0-video-gpl
 ```
 
 The native binaries will be automatically downloaded from this release during installation.
@@ -102,7 +102,7 @@ await FFmpegKit.execute('-i input.mp4 -c:v h264_videotoolbox -b:v 2M -c:a copy o
 No code changes required! Simply update your dependency:
 
 ```bash
-npm install github:ameriles/ffmpeg-kit#v1.1.0-video-gpl
+npm install github:ameriles/ffmpeg-kit#v1.2.0-video-gpl
 ```
 
 All existing FFmpeg commands will continue to work and will automatically benefit from hardware acceleration when available.
@@ -140,7 +140,7 @@ GPL-3.0 (due to x264, x265, xvidcore)
 ## Verification
 
 After publishing, verify:
-1. The release appears at: https://github.com/ameriles/ffmpeg-kit/releases/tag/v1.1.0-video-gpl
+1. The release appears at: https://github.com/ameriles/ffmpeg-kit/releases/tag/v1.2.0-video-gpl
 2. Both binary files are attached and downloadable
 3. The download script will fetch from this release automatically
 
@@ -153,7 +153,7 @@ In your React Native project:
 npm uninstall @ameriles/ffmpeg-kit-react-native-video-gpl
 
 # Install new version
-npm install github:ameriles/ffmpeg-kit#v1.1.0-video-gpl
+npm install github:ameriles/ffmpeg-kit#v1.2.0-video-gpl
 
 # iOS
 cd ios && pod install

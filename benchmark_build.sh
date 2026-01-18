@@ -182,3 +182,39 @@ echo "Machine: $(sysctl -n machdep.cpu.brand_string)"
 echo "Cores: $(sysctl -n hw.ncpu)"
 echo ""
 echo "🎉 All builds completed successfully!"
+
+# Package release artifacts
+echo ""
+echo "=========================================="
+echo "📦 PACKAGING RELEASE ARTIFACTS"
+echo "=========================================="
+
+IOS_BUNDLE_DIR="prebuilt/bundle-apple-framework-ios"
+ANDROID_BUNDLE_DIR="prebuilt/bundle-android-aar"
+
+IOS_ARCHIVE="prebuilt/ffmpeg-kit-video-gpl-ios.tar.gz"
+ANDROID_ARCHIVE="prebuilt/ffmpeg-kit-video-gpl-android.zip"
+
+if [ ! -d "${IOS_BUNDLE_DIR}" ]; then
+    echo "❌ iOS bundle not found at ${IOS_BUNDLE_DIR}"
+    echo "   Ensure ios.sh completed successfully and frameworks were created."
+    exit 1
+fi
+
+if [ ! -d "${ANDROID_BUNDLE_DIR}" ]; then
+    echo "❌ Android bundle not found at ${ANDROID_BUNDLE_DIR}"
+    echo "   Ensure android.sh completed successfully and the AAR was created."
+    exit 1
+fi
+
+echo "Creating iOS archive: ${IOS_ARCHIVE}"
+rm -f "${IOS_ARCHIVE}"
+(cd prebuilt && tar -czf "$(basename "${IOS_ARCHIVE}")" "$(basename "${IOS_BUNDLE_DIR}")")
+
+echo "Creating Android archive: ${ANDROID_ARCHIVE}"
+rm -f "${ANDROID_ARCHIVE}"
+(cd prebuilt && zip -r "$(basename "${ANDROID_ARCHIVE}")" "$(basename "${ANDROID_BUNDLE_DIR}")" >/dev/null)
+
+echo "✅ Release artifacts created:"
+echo " - ${IOS_ARCHIVE}"
+echo " - ${ANDROID_ARCHIVE}"

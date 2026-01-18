@@ -11,6 +11,18 @@ arm*)
   ;;
 esac
 
+# WORKAROUND: fp.h was removed from recent Apple SDKs (e.g., iOS 26.x).
+# Replace <fp.h> include with <math.h> in libpng headers.
+if [[ -n "${SDK_PATH}" && ! -f "${SDK_PATH}/usr/include/fp.h" ]]; then
+  ${SED_INLINE} "s|#      include <fp.h>|#      include <math.h>|" "${BASEDIR}/src/${LIB_NAME}/pngpriv.h"
+fi
+
+# WORKAROUND: libpng configure cannot detect pow when cross-compiling.
+if [[ -n "${SDK_PATH}" ]]; then
+  export ac_cv_func_pow=yes
+  export ac_cv_lib_m_pow=yes
+fi
+
 # ALWAYS CLEAN THE PREVIOUS BUILD
 make distclean 2>/dev/null 1>/dev/null
 
