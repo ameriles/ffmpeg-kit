@@ -1,17 +1,36 @@
 # GitHub Release Instructions for v2.0.0-video-lgpl
 
+## Pre-Release: Commit and Tag
+
+1. **Stage and commit all changes**:
+   ```bash
+   git add -A
+   git commit -m "v2.0.0-video-lgpl: Remove GPL libraries, add openh264, rename to video-lgpl"
+   ```
+
+2. **Create the annotated tag**:
+   ```bash
+   git tag -a v2.0.0-video-lgpl -m "Video-LGPL v2.0.0 - GPL-Free Build with Hardware Acceleration"
+   ```
+
+3. **Push the commit and tag to GitHub**:
+   ```bash
+   git push origin drop-gpl
+   git push origin v2.0.0-video-lgpl
+   ```
+
 ## Steps to Create the Release
 
-1. Go to: https://github.com/ameriles/ffmpeg-kit/releases/new
+4. Go to: https://github.com/ameriles/ffmpeg-kit/releases/new
 
-2. **Choose a tag**: Select `v2.0.0-video-lgpl`
+5. **Choose a tag**: Select `v2.0.0-video-lgpl`
 
-3. **Release title**: 
+6. **Release title**: 
    ```
    Video-LGPL v2.0.0 - GPL-Free Build with Hardware Acceleration
    ```
 
-4. **Description** (copy and paste):
+7. **Description** (copy and paste):
 
 ---
 
@@ -135,12 +154,12 @@ LGPL-3.0 (no GPL libraries included)
 
 ---
 
-5. **Upload binaries**:
+8. **Upload binaries**:
    - Click "Attach binaries by dropping them here or selecting them"
    - Upload: `prebuilt/ffmpeg-kit-video-lgpl-ios.tar.gz` (9.5 MB)
    - Upload: `prebuilt/ffmpeg-kit-video-lgpl-android.zip` (20 MB)
 
-6. Click **"Publish release"**
+9. Click **"Publish release"**
 
 ## Verification
 
