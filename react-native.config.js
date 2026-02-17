@@ -3,7 +3,7 @@ module.exports = {
     platforms: {
       ios: {
         project: 'react-native/ios/FFmpegKitReactNativeModule.xcodeproj',
-        podspecPath: 'react-native/ffmpeg-kit-react-native-video-gpl.podspec'
+        podspecPath: 'react-native/ffmpeg-kit-react-native-video-lgpl.podspec'
       },
       android: {
         sourceDir: 'react-native/android',

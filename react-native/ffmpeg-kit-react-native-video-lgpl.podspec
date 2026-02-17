@@ -3,7 +3,7 @@ require "json"
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
 Pod::Spec.new do |s|
-  s.name         = "ffmpeg-kit-react-native-video-gpl"
+  s.name         = "ffmpeg-kit-react-native-video-lgpl"
   s.version      = package["version"]
   s.summary      = package["description"]
   s.homepage     = package["homepage"]
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.requires_arc      = true
   s.static_framework  = true
 
-  s.source       = { :git => "https://github.com/ameriles/ffmpeg-kit.git", :tag => "v#{s.version}-video-gpl" }
+  s.source       = { :git => "https://github.com/ameriles/ffmpeg-kit.git", :tag => "v#{s.version}-video-lgpl" }
 
   s.source_files = "ios/**/*.{h,m}"
 

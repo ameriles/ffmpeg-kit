@@ -137,16 +137,17 @@ include them.
  - `VideoToolbox` is not available on LTS releases of `iOS` and `tvOS`
  - `zimg` is supported since `v4.5.1`
 
-#### Custom video-gpl Build (Optimized)
+#### Custom video-lgpl Build (Optimized)
 
-A custom **video-gpl** variant has been created with only essential video codecs, optimized for video transcoding use cases where subtitle rendering and audio encoding are not needed. This variant provides significantly smaller binaries (~30-40% reduction) while maintaining full video codec support.
+A custom **video-lgpl** variant has been created with only essential video codecs and no GPL libraries, optimized for video transcoding use cases where subtitle rendering and audio encoding are not needed. This variant is fully LGPL-3.0 compliant.
 
 **Libraries included:**
-- **Video codecs (GPL)**: x264, x265, xvidcore, kvazaar
-- **Video codecs (LGPL)**: dav1d (AV1), libvpx (VP8/VP9), libwebp
-- **Video utilities**: libvidstab (stabilization), snappy, zimg (colorspace conversion)
+- **Video codecs (LGPL/BSD)**: openh264 (H.264, BSD), kvazaar (H.265, LGPL)
+- **Video codecs (BSD)**: dav1d (AV1), libvpx (VP8/VP9), libwebp
+- **Video utilities**: snappy, zimg (colorspace conversion)
 - **Audio support**: Native FFmpeg decoders for MP3, Vorbis, AAC, Opus, FLAC (no encoders)
 - **Hardware acceleration**: VideoToolbox (iOS), MediaCodec (Android) - for faster encode/decode with lower battery consumption
+- **NOT included (GPL)**: x264, x265, xvidcore, libvidstab
 
 **Libraries excluded:**
 - ❌ Subtitle/text rendering: fontconfig, freetype, fribidi, libass
@@ -165,16 +166,13 @@ A custom **video-gpl** variant has been created with only essential video codecs
 **Build commands:**
 ```bash
 # iOS (arm64 device only)
-./ios.sh --enable-gpl \
+./ios.sh \
   --enable-dav1d \
   --enable-kvazaar \
+  --enable-openh264 \
   --enable-libvpx \
   --enable-libwebp \
   --enable-snappy \
-  --enable-libvidstab \
-  --enable-x264 \
-  --enable-x265 \
-  --enable-xvidcore \
   --enable-zimg \
   --enable-ios-videotoolbox \
   --disable-arm64-simulator \
@@ -185,21 +183,21 @@ A custom **video-gpl** variant has been created with only essential video codecs
   --disable-arm64-mac-catalyst
 
 # Android (arm-v7a + arm64-v8a, API 24+)
-./android.sh --enable-gpl \
+./android.sh \
   --enable-dav1d \
   --enable-kvazaar \
+  --enable-openh264 \
   --enable-libvpx \
   --enable-libwebp \
   --enable-snappy \
-  --enable-libvidstab \
-  --enable-x264 \
-  --enable-x265 \
-  --enable-xvidcore \
   --enable-zimg \
   --enable-android-media-codec \
   --disable-arm-v7a-neon \
   --disable-x86 \
   --disable-x86-64
+
+# Or use the benchmark script:
+./benchmark_build.sh --video
 ```
 
 **Hardware acceleration:**
@@ -295,6 +293,8 @@ All applications are identical and supports command execution, video encoding, a
 burning subtitles, video stabilisation, pipe operations and concurrent command execution.
 
 ### 14. License
+
+> **Note:** This fork (`video-lgpl`) does **not** use `--enable-gpl` and does not include any GPL libraries. All bundles produced by this fork are licensed under `LGPL v3.0`.
 
 `FFmpegKit` library alone is licensed under the `LGPL v3.0`.
 

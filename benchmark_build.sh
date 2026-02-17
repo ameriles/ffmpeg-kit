@@ -5,7 +5,7 @@
 # This will give you accurate timing for your M3 MacBook Pro 💪
 
 # Parse arguments
-BUILD_TYPE="video"  # default to video-gpl
+BUILD_TYPE="video"  # default to video-lgpl
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -20,17 +20,17 @@ while [[ $# -gt 0 ]]; do
         *)
             echo "Unknown option: $1"
             echo "Usage: $0 [--full|--video]"
-            echo "  --full:  Build full-gpl variant (all codecs, all libraries)"
-            echo "  --video: Build video-gpl variant (video codecs + GPL, default)"
+            echo "  --full:  Build full variant (all codecs, all libraries)"
+            echo "  --video: Build video-lgpl variant (video codecs, no GPL, default)"
             exit 1
             ;;
     esac
 done
 
 if [ "$BUILD_TYPE" = "full" ]; then
-    echo "🚀 Starting ffmpeg-kit FULL-GPL build benchmark..."
+    echo "🚀 Starting ffmpeg-kit FULL build benchmark..."
 else
-    echo "🚀 Starting ffmpeg-kit VIDEO-GPL build benchmark..."
+    echo "🚀 Starting ffmpeg-kit VIDEO-LGPL build benchmark..."
 fi
 
 echo "Platform: $(uname -m)"
@@ -57,17 +57,14 @@ echo ""
 IOS_START=$(date +%s)
 
 if [ "$BUILD_TYPE" = "video" ]; then
-    # video-gpl: solo codecs de video esenciales (sin subtítulos ni texto)
-    ./ios.sh --enable-gpl \
+    # video-lgpl: codecs de video esenciales sin librerías GPL
+    ./ios.sh \
       --enable-dav1d \
       --enable-kvazaar \
+      --enable-openh264 \
       --enable-libvpx \
       --enable-libwebp \
       --enable-snappy \
-      --enable-libvidstab \
-      --enable-x264 \
-      --enable-x265 \
-      --enable-xvidcore \
       --enable-zimg \
       --enable-ios-videotoolbox \
       --disable-arm64-simulator \
@@ -77,8 +74,8 @@ if [ "$BUILD_TYPE" = "video" ]; then
       --disable-x86-64-mac-catalyst \
       --disable-arm64-mac-catalyst
 else
-    # full-gpl: todas las librerías
-    ./ios.sh --full --enable-gpl \
+    # full: todas las librerías
+    ./ios.sh --full \
       --disable-arm64-simulator \
       --disable-arm64e \
       --disable-i386 \
@@ -118,25 +115,22 @@ export ANDROID_NDK_ROOT="$HOME/Library/Android/sdk/ndk/27.1.12297006"
 ANDROID_START=$(date +%s)
 
 if [ "$BUILD_TYPE" = "video" ]; then
-    # video-gpl: solo codecs de video esenciales (sin subtítulos ni texto)
-    ./android.sh --enable-gpl \
+    # video-lgpl: codecs de video esenciales sin librerías GPL
+    ./android.sh \
       --enable-dav1d \
       --enable-kvazaar \
+      --enable-openh264 \
       --enable-libvpx \
       --enable-libwebp \
       --enable-snappy \
-      --enable-libvidstab \
-      --enable-x264 \
-      --enable-x265 \
-      --enable-xvidcore \
       --enable-zimg \
       --enable-android-media-codec \
       --disable-arm-v7a-neon \
       --disable-x86 \
       --disable-x86-64
 else
-    # full-gpl: todas las librerías
-    ./android.sh --full --enable-gpl \
+    # full: todas las librerías
+    ./android.sh --full \
       --disable-arm-v7a-neon \
       --disable-x86 \
       --disable-x86-64
@@ -169,9 +163,9 @@ echo "📊 BUILD BENCHMARK RESULTS"
 echo "=========================================="
 echo ""
 if [ "$BUILD_TYPE" = "video" ]; then
-    echo "Build type:    VIDEO-GPL"
+    echo "Build type:    VIDEO-LGPL"
 else
-    echo "Build type:    FULL-GPL"
+    echo "Build type:    FULL"
 fi
 echo "iOS build:     ${IOS_MINUTES}m ${IOS_SECONDS}s"
 echo "Android build: ${ANDROID_MINUTES}m ${ANDROID_SECONDS}s"
@@ -192,8 +186,8 @@ echo "=========================================="
 IOS_BUNDLE_DIR="prebuilt/bundle-apple-framework-ios"
 ANDROID_BUNDLE_DIR="prebuilt/bundle-android-aar"
 
-IOS_ARCHIVE="prebuilt/ffmpeg-kit-video-gpl-ios.tar.gz"
-ANDROID_ARCHIVE="prebuilt/ffmpeg-kit-video-gpl-android.zip"
+IOS_ARCHIVE="prebuilt/ffmpeg-kit-video-lgpl-ios.tar.gz"
+ANDROID_ARCHIVE="prebuilt/ffmpeg-kit-video-lgpl-android.zip"
 
 if [ ! -d "${IOS_BUNDLE_DIR}" ]; then
     echo "❌ iOS bundle not found at ${IOS_BUNDLE_DIR}"

@@ -5,15 +5,15 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const RELEASE_TAG = 'v1.2.0-video-gpl';
+const RELEASE_TAG = 'v2.0.0-video-lgpl';
 const REPO = 'ameriles/ffmpeg-kit';
-const IOS_BINARY = 'ffmpeg-kit-video-gpl-ios.tar.gz';
-const ANDROID_BINARY = 'ffmpeg-kit-video-gpl-android.zip';
+const IOS_BINARY = 'ffmpeg-kit-video-lgpl-ios.tar.gz';
+const ANDROID_BINARY = 'ffmpeg-kit-video-lgpl-android.zip';
 
 const iosDir = path.join(__dirname, '../ios');
 const androidDir = path.join(__dirname, '../android/libs');
 
-console.log('📦 Downloading FFmpeg Kit video-gpl binaries...');
+console.log('📦 Downloading FFmpeg Kit video-lgpl binaries...');
 
 function download(url, dest) {
   return new Promise((resolve, reject) => {

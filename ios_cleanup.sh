@@ -23,4 +23,7 @@ rm -f build.log
 echo "✅ iOS cleanup complete!"
 echo ""
 echo "Disk space freed. You can now run a clean iOS build with:"
-echo "  ./ios.sh --full --enable-gpl --disable-arm64-simulator --disable-arm64e --disable-i386 --disable-x86-64 --disable-x86-64-mac-catalyst --disable-arm64-mac-catalyst"
+echo "  ./benchmark_build.sh --video"
+echo ""
+echo "Or manually:"
+echo "  ./ios.sh --enable-dav1d --enable-kvazaar --enable-openh264 --enable-libvpx --enable-libwebp --enable-snappy --enable-zimg --enable-ios-videotoolbox --disable-arm64-simulator --disable-arm64e --disable-i386 --disable-x86-64 --disable-x86-64-mac-catalyst --disable-arm64-mac-catalyst"

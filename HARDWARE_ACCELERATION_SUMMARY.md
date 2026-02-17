@@ -26,18 +26,18 @@
   - Best practices and troubleshooting
   - Common use cases
 - ✅ Updated `README.md` with hardware acceleration features
-- ✅ Updated `README-VIDEO-GPL.md` with hardware acceleration section
+- ✅ Updated `README-VIDEO-LGPL.md` with hardware acceleration section
 
 ### 4. Version Control
-- ✅ Updated package.json to v1.0.4
+- ✅ Updated package.json to v2.0.0
 - ✅ Created Git commit with detailed description
-- ✅ Created Git tag `v1.0.4-video-gpl`
+- ✅ Created Git tag `v2.0.0-video-lgpl`
 - ✅ Pushed all changes to GitHub
 
 ### 5. Binary Artifacts
 - ✅ Generated compressed binaries:
-  - `ffmpeg-kit-video-gpl-ios-hw.tar.gz` (9.5 MB)
-  - `ffmpeg-kit-video-gpl-android-hw.zip` (20 MB)
+  - `ffmpeg-kit-video-lgpl-ios-hw.tar.gz` (9.5 MB)
+  - `ffmpeg-kit-video-lgpl-android-hw.zip` (20 MB)
 
 ## 📊 Key Results
 
@@ -72,30 +72,30 @@ Expected improvements based on hardware acceleration:
 ## 📦 Package Information
 
 ### Current Version
-- **Version**: 1.0.4
-- **Tag**: v1.0.4-video-gpl
-- **Package name**: `@ameriles/ffmpeg-kit-react-native-video-gpl`
+- **Version**: 2.0.0
+- **Tag**: v2.0.0-video-lgpl
+- **Package name**: `@ameriles/ffmpeg-kit-react-native-video-lgpl`
 
 ### Installation
 ```bash
-npm install github:ameriles/ffmpeg-kit#v1.0.4-video-gpl
+npm install github:ameriles/ffmpeg-kit#v2.0.0-video-lgpl
 ```
 
 ## 🚀 Next Steps
 
 ### Recommended Actions
 
-1. **Create GitHub Release v1.0.4-video-gpl**
-   - Upload `ffmpeg-kit-video-gpl-ios-hw.tar.gz`
-   - Upload `ffmpeg-kit-video-gpl-android-hw.zip`
+1. **Create GitHub Release v2.0.0-video-lgpl**
+   - Upload `ffmpeg-kit-video-lgpl-ios-hw.tar.gz`
+   - Upload `ffmpeg-kit-video-lgpl-android-hw.zip`
    - Include release notes about hardware acceleration
 
 2. **Update Download Script** (Optional)
-   - Update `download-binaries.js` to reference v1.0.4-video-gpl
+   - Update `download-binaries.js` to reference v2.0.0-video-lgpl
    - Or keep using v1.0.0 binaries if you prefer to test first
 
 3. **Test in Production**
-   - Update your VideoZipper app to v1.0.4-video-gpl
+   - Update your VideoZipper app to v2.0.0-video-lgpl
    - Test video transcoding with hardware acceleration
    - Measure performance improvements
    - Monitor battery usage
@@ -107,10 +107,10 @@ npm install github:ameriles/ffmpeg-kit#v1.0.4-video-gpl
 ## 📝 Usage Example
 
 ```typescript
-import { FFmpegKit } from '@ameriles/ffmpeg-kit-react-native-video-gpl';
+import { FFmpegKit } from '@ameriles/ffmpeg-kit-react-native-video-lgpl';
 
 // Hardware acceleration is used automatically!
-await FFmpegKit.execute('-i input.mp4 -c:v libx264 -preset medium -crf 23 -c:a copy output.mp4');
+await FFmpegKit.execute('-i input.mp4 -c:v libopenh264 -c:a copy output.mp4');
 
 // Or explicitly use VideoToolbox on iOS
 await FFmpegKit.execute('-i input.mp4 -c:v h264_videotoolbox -b:v 2M -c:a copy output.mp4');
@@ -155,20 +155,20 @@ await FFmpegKit.execute('-i input.mp4 -c:v h264_videotoolbox -b:v 2M -c:a copy o
 - **ios-videotoolbox**: VideoToolbox framework (iOS system API)
 - **android-media-codec**: MediaCodec API (Android system API)
 - **android-zlib**: Required for Android builds
-- All video codecs from previous build (x264, x265, libvpx, dav1d, etc.)
+- All video codecs from the build (openh264, kvazaar, libvpx, dav1d, etc.)
 
 ### Build Log Verification
 ```
 Building ffmpeg-kit shared library for iOS
-Libraries: ios-zlib, ios-videotoolbox, libvpx, libwebp, dav1d, kvazaar, x264, xvidcore, x265, libvidstab, snappy, zimg
+Libraries: ios-zlib, ios-videotoolbox, libvpx, libwebp, dav1d, kvazaar, openh264, snappy, zimg
 
 Building ffmpeg-kit library for Android
-Libraries: android-zlib, android-media-codec, libvpx, libwebp, dav1d, kvazaar, x264, xvidcore, x265, libvidstab, snappy, zimg
+Libraries: android-zlib, android-media-codec, libvpx, libwebp, dav1d, kvazaar, openh264, snappy, zimg
 ```
 
 ## ✨ Summary
 
-This implementation successfully adds hardware acceleration support to the video-gpl build without any drawbacks:
+This implementation successfully adds hardware acceleration support to the video-lgpl build without any drawbacks:
 
 - ✅ **Zero size increase** - Still 20MB per platform
 - ✅ **Same build time** - ~10 minutes total
@@ -177,4 +177,4 @@ This implementation successfully adds hardware acceleration support to the video
 - ✅ **Better battery life** - 50-70% less CPU usage
 - ✅ **Comprehensive documentation** - Easy to use and troubleshoot
 
-The video-gpl build is now production-ready with optimal performance for mobile video processing! 🎉
+The video-lgpl build is now production-ready with optimal performance for mobile video processing! 🎉

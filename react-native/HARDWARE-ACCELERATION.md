@@ -2,7 +2,7 @@
 
 ## Overview
 
-This video-gpl build includes hardware acceleration support for both iOS and Android platforms:
+This video-lgpl build includes hardware acceleration support for both iOS and Android platforms:
 
 - **iOS**: VideoToolbox for H.264/H.265 hardware encoding/decoding
 - **Android**: MediaCodec for GPU-accelerated video processing
@@ -35,10 +35,10 @@ FFmpeg automatically detects and uses hardware acceleration when available. No s
 ### Basic Video Transcoding
 
 ```typescript
-import { FFmpegKit } from '@ameriles/ffmpeg-kit-react-native-video-gpl';
+import { FFmpegKit } from '@ameriles/ffmpeg-kit-react-native-video-lgpl';
 
 // Hardware acceleration is used automatically for H.264/H.265
-const command = '-i input.mp4 -c:v libx264 -preset medium -crf 23 -c:a copy output.mp4';
+const command = '-i input.mp4 -c:v libopenh264 -c:a copy output.mp4';
 await FFmpegKit.execute(command);
 ```
 
@@ -62,7 +62,7 @@ To explicitly use MediaCodec on Android:
 
 ```typescript
 // H.264 decoding with MediaCodec
-const command = '-hwaccel mediacodec -c:v h264_mediacodec -i input.mp4 -c:v libx264 -c:a copy output.mp4';
+const command = '-hwaccel mediacodec -c:v h264_mediacodec -i input.mp4 -c:v libopenh264 -c:a copy output.mp4';
 await FFmpegKit.execute(command);
 
 // Note: MediaCodec is primarily used for decoding. For encoding, software codecs are typically faster.
@@ -76,44 +76,31 @@ For most use cases, let FFmpeg automatically select the best encoder:
 
 ```typescript
 // FFmpeg will use hardware acceleration when beneficial
-const command = '-i input.mp4 -c:v libx264 -preset medium -c:a copy output.mp4';
+const command = '-i input.mp4 -c:v libopenh264 -c:a copy output.mp4';
 ```
 
 ### 2. Video Compression
 
 ```typescript
-// Compress video to reduce file size (hardware-accelerated)
-const command = '-i input.mp4 -c:v libx264 -preset medium -crf 28 -c:a copy compressed.mp4';
+// Compress video to reduce file size
+const command = '-i input.mp4 -c:v h264_videotoolbox -b:v 2M -c:a copy compressed.mp4';
 await FFmpegKit.execute(command);
 ```
 
 ### 3. Format Conversion
 
 ```typescript
-// Convert MOV to MP4 (hardware-accelerated when possible)
-const command = '-i input.mov -c:v libx264 -c:a aac output.mp4';
+// Convert MOV to MP4
+const command = '-i input.mov -c:v libopenh264 -c:a aac output.mp4';
 await FFmpegKit.execute(command);
 ```
 
 ### 4. Resolution Scaling
 
 ```typescript
-// Scale video to 720p (hardware-accelerated)
-const command = '-i input.mp4 -vf scale=1280:720 -c:v libx264 -preset medium -c:a copy output.mp4';
+// Scale video to 720p
+const command = '-i input.mp4 -vf scale=1280:720 -c:v libopenh264 -c:a copy output.mp4';
 await FFmpegKit.execute(command);
-```
-
-### 5. Video Stabilization
-
-```typescript
-// Two-pass video stabilization
-// Pass 1: Analyze
-const analyzeCmd = '-i input.mp4 -vf vidstabdetect=shakiness=10:accuracy=15 -f null -';
-await FFmpegKit.execute(analyzeCmd);
-
-// Pass 2: Transform (hardware-accelerated encoding)
-const transformCmd = '-i input.mp4 -vf vidstabtransform=smoothing=30,unsharp=5:5:0.8:3:3:0.4 -c:v libx264 -preset medium -c:a copy stabilized.mp4';
-await FFmpegKit.execute(transformCmd);
 ```
 
 ## Performance Comparison
@@ -136,7 +123,7 @@ Typical encoding times for a 1-minute 1080p video:
 3. **Check FFmpeg logs**: Enable verbose logging to see if hardware is being used
 
 ```typescript
-import { FFmpegKitConfig } from '@ameriles/ffmpeg-kit-react-native-video-gpl';
+import { FFmpegKitConfig } from '@ameriles/ffmpeg-kit-react-native-video-lgpl';
 
 // Enable verbose logging
 FFmpegKitConfig.enableLogCallback((log) => {

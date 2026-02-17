@@ -16,7 +16,7 @@
 
     `dav1d`, `fontconfig`, `freetype`, `fribidi`, `gmp`, `gnutls`, `kvazaar`, `lame`, `libass`, `libiconv`, `libilbc`, `libtheora`, `libvorbis`, `libvpx`, `libwebp`, `libxml2`, `opencore-amr`, `opus`, `shine`, `snappy`, `soxr`, `speex`, `twolame`, `vo-amrwbenc`, `zimg`
 
-  - 4 external libraries with GPL license
+  - 4 external libraries with GPL license (NOT included in this video-lgpl build)
 
     `vid.stab`, `x264`, `x265`, `xvidcore`
 
@@ -24,7 +24,7 @@
   - `bzip2`, `iconv`, `libuuid`, `zlib` system libraries and `AudioToolbox`, `VideoToolbox`, `AVFoundation` system frameworks on iOS
 
 - Includes Typescript definitions
-- Licensed under `LGPL 3.0` by default, some packages licensed by `GPL v3.0` effectively
+- This build (`video-lgpl`) is licensed under `LGPL 3.0` — no GPL libraries included
 
 ### 2. Installation
 
